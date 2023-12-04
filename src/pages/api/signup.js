@@ -26,39 +26,41 @@ const validateUserData = ({ firstName, lastName, sex, email, password }) => {
 };
 
 const signup = async (req, res) => {
-  await connectToDb();
-
-  if (req.method === "POST") {
-    // console.log(req.body)
-    const { firstName, lastName, sex, email, password } = req.body;
-    const errors = validateUserData({
-      firstName,
-      lastName,
-      sex,
-      email,
-      password,
-    });
-    if (Object.keys(errors).length > 0) {
-      return res.status(400).json({ errors });
-    }
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(409).json({ message: "Email already exists" });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 12);
-    const user = new User({
-      email,
-      password: hashedPassword,
-      firstName,
-      lastName,
-      sex,
-    });
-    await user.save();
-    res.status(201).json({ message: "Account created successfully" });
+  if (req.method !== "POST") {
+    return res.status(405).json({ message: "Method not allowed" });
   }
 
-  return res.status(405).json({ message: "Method not allowed" });
+  await connectToDb();
+
+  const { firstName, lastName, sex, email, password } = req.body;
+  const errors = validateUserData({
+    firstName,
+    lastName,
+    sex,
+    email,
+    password,
+  });
+
+  if (Object.keys(errors).length > 0) {
+    return res.status(400).json({ errors });
+  }
+
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    return res.status(409).json({ message: "Email already exists" });
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 12);
+  const user = new User({
+    email,
+    password: hashedPassword,
+    firstName,
+    lastName,
+    sex,
+  });
+
+  await user.save();
+  return res.status(201).json({ message: "Account created successfully" });
 };
 
 export default signup;
