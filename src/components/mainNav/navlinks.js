@@ -1,7 +1,7 @@
 export const MainNavLinks = [
     {
         title: 'How It Works',
-        path: '/docs'
+        path: '/#how-it-works'
     },
     {
         title: 'Pricing',

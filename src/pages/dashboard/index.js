@@ -11,7 +11,9 @@ export default function Dashboard() {
 }
 
 export async function getServerSideProps(context) {
+  console.log(context);
   const session = await getSession({ req: context.req });
+  console.log(session);
   if (!session) {
     return {
       redirect: {

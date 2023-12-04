@@ -264,7 +264,7 @@ export default function Register() {
       <button
         type="submit"
         onClick={handleSubmit}
-        className="bg-[#266FD5] text-white text-[22px] mt-4 w-[600px] font-bold py-3 rounded-md hover:bg-[#1f5aad] duration-200"
+        className="bg-[#266FD5] text-white text-[22px] mt-4 w-full max-w-[600px] font-bold py-3 rounded-md hover:bg-[#1f5aad] duration-200"
       >
         Create Account
       </button>

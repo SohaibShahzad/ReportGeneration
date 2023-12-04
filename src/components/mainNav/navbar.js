@@ -2,8 +2,6 @@ import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { MainNavLinks } from "./navlinks";
-import { TbMenu2 } from "react-icons/tb";
-import { IoClose } from "react-icons/io5";
 
 export const MainNavWrapper = ({ children }) => {
   const { data: session } = useSession();
@@ -63,7 +61,7 @@ export const MainNavWrapper = ({ children }) => {
               )}
               <div>
                 <button
-                  onClick={() => setShowMenu(!showMenu)}
+                  onClick={() => setShowMenu(prev => !prev)}
                   className="lg:hidden flex flex-col justify-between items-end w-[25px] h-[15px]"
                 >
                   <span
