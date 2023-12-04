@@ -7,10 +7,45 @@ export default function Contact() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const inputStyle = "bg-[#f2f2f2] px-6 py-3 rounded-md w-full";
+  const [errors, setErrors] = useState({});
+
+  const inputStyle =
+    "w-full bg-[#f2f2f2] px-4 py-3 rounded-md rounded-md focus:outline-none focus:border-blue-500";
+
+  const handleChange = (value, setter, field) => {
+    setter(value);
+    if (errors[field]) {
+      setErrors({ ...errors, [field]: null });
+    }
+  };
+
+  const validateFields = () => {
+    const newErrors = {};
+
+    if (!firstName) {
+      newErrors.firstName = "First name is required.";
+    }
+    if (!lastName) {
+      newErrors.lastName = "Last name is required.";
+    }
+    if (!email) {
+      newErrors.email = "Email is required.";
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = "Email is invalid.";
+    }
+    if (!message) {
+      newErrors.message = "Message is required.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!validateFields()) {
+      return;
+    }
 
     const formData = {
       firstName,
@@ -34,45 +69,71 @@ export default function Contact() {
   };
 
   return (
-    <section
-      className="flex flex-col items-center justify-center overflow-y-auto"
-      style={{ height: "calc(100vh - 250px)" }}
-    >
+    <main className="flex flex-col items-center justify-center h-[calc(100vh-70px)] md:h-[calc(100vh-250px)]">
       <ToastContainer autoClose={2000} theme="light" position="bottom-right" />
-      <h1 className="text-center text-[56px] my-12 font-extrabold">
+      <h1 className="text-center text-[40px] md:text-[56px] my-2 md:my-12 font-extrabold">
         Contact Us
       </h1>
       <div>
-        <form className="flex flex-col gap-8 w-[600px]" onSubmit={handleSubmit}>
-          <span className="flex gap-8">
-            <input
-              type="text"
-              placeholder="First Name"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              className={inputStyle}
-            />
-            <input
-              type="text"
-              placeholder="Last Name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              className={inputStyle}
-            />
+        <form
+          className="flex flex-col gap-2 md:gap-6 lg:gap-8 overflow-y-auto max-w-[600px] w-full"
+          onSubmit={handleSubmit}
+        >
+          <span className="flex gap-2 md:gap-6 lg:gap-8">
+            <div>
+              <input
+                type="text"
+                placeholder="First Name"
+                value={firstName}
+                onChange={(e) =>
+                  handleChange(e.target.value, setFirstName, "firstName")
+                }
+                className={inputStyle}
+              />
+              {errors.firstName && (
+                <p className="text-red-500 text-xs ml-2">{errors.firstName}</p>
+              )}
+            </div>
+            <div>
+              <input
+                type="text"
+                placeholder="Last Name"
+                value={lastName}
+                onChange={(e) =>
+                  handleChange(e.target.value, setLastName, "lastName")
+                }
+                className={inputStyle}
+              />
+              {errors.lastName && (
+                <p className="text-red-500 text-xs ml-2">{errors.lastName}</p>
+              )}
+            </div>
           </span>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className={inputStyle}
-          />
-          <textarea
-            placeholder="Message"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            className={`${inputStyle} h-48 resize-none`}
-          />
+          <div>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => handleChange(e.target.value, setEmail, "email")}
+              className={inputStyle}
+            />
+            {errors.email && (
+              <p className="text-red-500 text-xs ml-2">{errors.email}</p>
+            )}
+          </div>
+          <div>
+            <textarea
+              placeholder="Message"
+              value={message}
+              onChange={(e) =>
+                handleChange(e.target.value, setMessage, "message")
+              }
+              className={`${inputStyle} h-48 resize-none`}
+            />
+            {errors.message && (
+              <p className="text-red-500 text-xs ml-2">{errors.message}</p>
+            )}
+          </div>
           <button
             type="submit"
             className="bg-[#266FD5] text-white text-[22px] tracking-[2px] font-bold py-3 rounded-md hover:bg-[#1f5aad] duration-200"
@@ -81,6 +142,6 @@ export default function Contact() {
           </button>
         </form>
       </div>
-    </section>
+    </main>
   );
 }

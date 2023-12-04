@@ -35,25 +35,6 @@ export default function Login() {
     return Object.keys(newErrors).length === 0;
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   if (!validateFields()) {
-  //     return;
-  //   }
-
-  //   const result = await signIn("credentials", {
-  //     redirect: false, // Prevent automatic redirect
-  //     email,
-  //     password,
-  //   });
-
-  //   if (result.error) {
-  //     toast.error(result.error || "Login failed");
-  //   } else {
-  //     router.push("/dashboard");
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateFields()) {
