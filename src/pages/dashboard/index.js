@@ -11,10 +11,11 @@ export default function Dashboard() {
 }
 
 export async function getServerSideProps(context) {
-  console.log(context);
+  console.log("context", context.req);
   const session = await getSession({ req: context.req });
-  console.log(session);
+  console.log("session", session);
   if (!session) {
+    console.log("redirecting");
     return {
       redirect: {
         destination: "/login",
@@ -22,6 +23,7 @@ export async function getServerSideProps(context) {
       },
     };
   }
+  console.log("returning props");
   return {
     props: {},
   };
