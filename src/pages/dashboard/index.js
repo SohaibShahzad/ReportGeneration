@@ -1,8 +1,8 @@
 import { getSession, useSession } from "next-auth/react";
 
+
 export default function Dashboard() {
   const { data: session } = useSession();
-
   return (
     <div>
       <h1>Welcome to the Dashboard, {session?.user?.name}</h1>

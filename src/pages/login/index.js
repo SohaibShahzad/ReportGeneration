@@ -35,24 +35,73 @@ export default function Login() {
     return Object.keys(newErrors).length === 0;
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   if (!validateFields()) {
+  //     return;
+  //   }
+
+  //   const result = await signIn("credentials", {
+  //     redirect: false, // Prevent automatic redirect
+  //     email,
+  //     password,
+  //   });
+
+  //   if (result.error) {
+  //     toast.error(result.error || "Login failed");
+  //   } else {
+  //     router.push("/dashboard");
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateFields()) {
       return;
     }
-
-    const result = await signIn("credentials", {
-      redirect: false, // Prevent automatic redirect
-      email,
-      password,
+  
+    // Wrap the signIn process in a promise
+    const loginPromise = new Promise(async (resolve, reject) => {
+      const result = await signIn("credentials", {
+        redirect: false, // Prevent automatic redirect
+        email,
+        password,
+      });
+  
+      if (result.error) {
+        reject(result.error);
+      } else {
+        resolve("Login successful!");
+      }
     });
-
-    if (result.error) {
-      toast.error(result.error || "Login failed");
-    } else {
-      router.push("/dashboard");
-    }
+  
+    toast
+      .promise(
+        loginPromise,
+        {
+          pending: "Logging in...",
+          success: "Logged in successfully! Redirecting...",
+          error: "Login failed. Please check your credentials."
+        },
+        {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }
+      )
+      .then(() => {
+        router.push("/dashboard");
+      })
+      .catch((error) => {
+        console.error("Login error:", error);
+        // Handle any additional actions on login failure
+      });
   };
+  
 
   const inputStyle =
     "w-full bg-[#f2f2f2] px-4 py-3 rounded-md rounded-md focus:outline-none focus:border-blue-500";
