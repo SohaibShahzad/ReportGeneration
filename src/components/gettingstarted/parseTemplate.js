@@ -121,7 +121,7 @@ export const ParseTemplate = ({ template, onGoBack }) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <main className="font-worksans md:w-[600px] mx-auto flex flex-col items-center justify-center h-[calc(100vh-70px)] md:h-[calc(100vh-250px)]">
+      <main className="font-worksans md:w-[600px] mx-auto flex flex-col items-center justify-center h-[calc(100vh-70px)] md:h-[calc(100vh-130px)]">
         <div className="space-y-4">
           <span className="flex items-start">
             <div className="relative">
@@ -182,12 +182,14 @@ export const ParseTemplate = ({ template, onGoBack }) => {
               )
             )}
           </div>
-          <Link
-            href="/dashboard"
-            className="bg-[#266FD5] text-white text-[14px] md:text-[18px] mt-10 w-full max-w-[600px] font-bold py-3 rounded-md hover:bg-[#1f5aad] duration-200"
-          >
-            Finish Practice!
-          </Link>
+          <div className="mt-[100px] flex text-center">
+            <Link
+              href="/dashboard"
+              className="bg-[#266FD5] text-white text-[14px]  w-full max-w-[600px] md:text-[18px] font-bold py-3 rounded-md hover:bg-[#1f5aad] duration-200"
+            >
+              Finish Practice!
+            </Link>
+          </div>
         </div>
       </main>
     </>

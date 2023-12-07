@@ -26,7 +26,7 @@ export const DocumentPractice = ({
     "w-full md:w-[600px] h-[200px] resize-none text-[20px] font-bold bg-[#f2f2f2] px-4 py-3 rounded-md focus:outline-none border border-[#777777] focus:border-blue-500";
 
   return (
-    <main className="font-worksans md:w-[600px] mx-auto flex flex-col items-center justify-center h-[calc(100vh-70px)] md:h-[calc(100vh-250px)]">
+    <main className="font-worksans md:w-[600px] mx-auto flex flex-col items-center justify-center h-[calc(100vh-70px)] md:h-[calc(100vh-130px)]">
       <div className="space-y-4">
         <span className="flex items-start">
           <button onClick={onGoBack} className="hidden md:flex">
@@ -54,7 +54,7 @@ export const DocumentPractice = ({
         </textarea>
         <button
           onClick={handleSubmit}
-          className="bg-[#266FD5] text-white text-[14px] md:text-[18px] mt-10 w-full max-w-[600px] font-bold py-3 rounded-md hover:bg-[#1f5aad] duration-200"
+          className="bg-[#266FD5] text-white text-[14px] md:text-[18px] w-full max-w-[600px] font-bold py-3 rounded-md hover:bg-[#1f5aad] duration-200"
         >
           Next Step
         </button>

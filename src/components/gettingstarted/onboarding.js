@@ -45,7 +45,7 @@ export const Onboarding = ({ onCompletion, user }) => {
   };
 
   return (
-    <main className="md:w-[600px] mx-auto flex flex-col items-center justify-center h-[calc(100vh-70px)] md:h-[calc(100vh-250px)]">
+    <main className="md:w-[650px] mx-auto flex flex-col items-center justify-center h-[calc(100vh-70px)] md:h-[calc(100vh-130px)]">
       <h1 className="text-left text-[24px] md:text-[28px] font-worksans mb-6 md:mb-10">
         Welcome {user?.name}! Let's get you rolling!
       </h1>
