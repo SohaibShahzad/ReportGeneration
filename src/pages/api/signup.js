@@ -2,11 +2,10 @@ import User from "@/model/userModel";
 import connectToDb from "@/lib/connectToDb";
 import bcrypt from "bcryptjs";
 
-const validateUserData = ({ firstName, lastName, sex, email, password }) => {
+const validateUserData = ({ firstName, lastName, email, password }) => {
   const errors = {};
   if (!firstName.trim()) errors.firstName = "First name is required.";
   if (!lastName.trim()) errors.lastName = "Last name is required.";
-  if (!sex) errors.sex = "Sex is required.";
   if (!email) {
     errors.email = "Email is required.";
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -32,11 +31,10 @@ const signup = async (req, res) => {
 
   await connectToDb();
 
-  const { firstName, lastName, sex, email, password } = req.body;
+  const { firstName, lastName,email, password } = req.body;
   const errors = validateUserData({
     firstName,
     lastName,
-    sex,
     email,
     password,
   });
@@ -56,7 +54,6 @@ const signup = async (req, res) => {
     password: hashedPassword,
     firstName,
     lastName,
-    sex,
   });
 
   await user.save();

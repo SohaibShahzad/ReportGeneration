@@ -38,7 +38,6 @@ export default NextAuth({
         // Add additional user info to the JWT token
         token.id = user.id;
         token.name = user.firstName + " " + user.lastName;
-        token.sex = user.sex;
       }
       return token;
     },
@@ -46,7 +45,6 @@ export default NextAuth({
       // Add additional user info to the session
       session.user.id = token.id;
       session.user.name = token.name;
-      session.user.sex = token.sex;
       return session;
     },
   },
