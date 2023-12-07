@@ -26,9 +26,9 @@ export const Onboarding = ({ onCompletion, user }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // if (!validateFields()) {
-    //   return;
-    // }
+    if (!validateFields()) {
+      return;
+    }
 
     console.log("industry", industry);
     console.log("templateCount", templateCount);
