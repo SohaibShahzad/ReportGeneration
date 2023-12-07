@@ -1,11 +1,11 @@
 // components/layout/PublicLayout.js
 import { MainNavWrapper } from "../mainNav/navbar";
 
-export const PublicLayout = ({ children }) => {
+export const PublicLayout = ({ children, routeName }) => {
   return (
     <div className="public-layout">
       <header>
-        <MainNavWrapper />
+        <MainNavWrapper routeName={routeName} />
       </header>
       <main
         className="mx-4 md:mx-28"

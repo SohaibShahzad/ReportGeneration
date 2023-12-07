@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { VscEyeClosed, VscEye } from "react-icons/vsc";
 import { toast, ToastContainer } from "react-toastify";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Register() {
+  const router = useRouter();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -140,6 +143,14 @@ export default function Register() {
       .then((result) => {
         console.log(result.message);
         resetForm();
+        signIn("credentials", {
+          email,
+          password,
+          redirect: false, // Prevent automatic redirect
+        }).then(() => {
+          // Redirect to /getting-started after successful login
+          router.push("/getting-started");
+        });
       })
       .catch((error) => {
         resetForm();
@@ -189,7 +200,7 @@ export default function Register() {
           {errors.lastName && (
             <p className="text-red-500 text-xs ml-2">{errors.lastName}</p>
           )}
-        </div> 
+        </div>
         <div>
           <label className="ml-2">Email Address</label>
           <input

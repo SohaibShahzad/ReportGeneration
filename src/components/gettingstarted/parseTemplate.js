@@ -11,6 +11,7 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { CgRemove, CgAdd } from "react-icons/cg";
+import Link from "next/link";
 
 export const ParseTemplate = ({ template, onGoBack }) => {
   const [parsedElements, setParsedElements] = useState([]);
@@ -181,12 +182,12 @@ export const ParseTemplate = ({ template, onGoBack }) => {
               )
             )}
           </div>
-          <button
-            onClick={handleSubmit}
+          <Link
+            href="/dashboard"
             className="bg-[#266FD5] text-white text-[14px] md:text-[18px] mt-10 w-full max-w-[600px] font-bold py-3 rounded-md hover:bg-[#1f5aad] duration-200"
           >
-            Next Step
-          </button>
+            Finish Practice!
+          </Link>
         </div>
       </main>
     </>

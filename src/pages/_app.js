@@ -12,7 +12,10 @@ export default function App({
   pageProps: { session, ...pageProps },
 }) {
   const router = useRouter();
-  const isDashboardPage = router.pathname.startsWith("/dashboard"); // Check if the pathname starts with /dashboard
+  const isDashboardPage = router.pathname.startsWith("/dashboard");
+  const routeName = router.pathname.startsWith("/getting-started")
+    ? "getting-started"
+    : "other";
 
   const getLayout =
     Component.getLayout ||
@@ -20,7 +23,7 @@ export default function App({
       isDashboardPage ? (
         <Layout>{page}</Layout>
       ) : (
-        <PublicLayout>{page}</PublicLayout>
+        <PublicLayout routeName={routeName}>{page}</PublicLayout>
       ));
 
   return (
