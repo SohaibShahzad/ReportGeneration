@@ -21,7 +21,7 @@ export const HeroSection = () => {
           </Link>
         </div>
         <div className="lg:col-span-3 order-1 lg:order-2">
-          <Image src="/assets/hero1.jpg" alt="Hero" width={2200} height={600} />
+          <Image src="/assets/hero1.jpg" alt="Hero" width={2200} height={400} />
         </div>
       </div>
     </section>
