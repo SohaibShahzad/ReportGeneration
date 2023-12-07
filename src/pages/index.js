@@ -12,7 +12,7 @@ export default function Home() {
   };
 
   return (
-    <main>
+    <main className="font-worksans">
       <HeroSection />
       {/* {session ? (
         <div>

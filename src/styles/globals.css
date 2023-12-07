@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Work Sans";
+  src: url("../../public/fonts/WorkSans-Variable.ttf");
+}
+
 .menu-animation {
   z-index: 10;
   -webkit-animation: slide-top 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
@@ -31,11 +36,34 @@
 }
 
 .glassmorphism {
-    background: rgba(255, 255, 255, 0.15);
-    z-index: 1000000;
-    /* box-shadow: 0 8px 32px 0 rgba(135, 130, 31, 0.37); */
-    backdrop-filter: blur(190px);
-    -webkit-backdrop-filter: blur(2px);
-    /* border: 1px solid rgba(255, 255, 255, 0.18); */
-  }
-  
+  background: rgba(255, 255, 255, 0.15);
+  z-index: 1000000;
+  /* box-shadow: 0 8px 32px 0 rgba(135, 130, 31, 0.37); */
+  backdrop-filter: blur(190px);
+  -webkit-backdrop-filter: blur(2px);
+  /* border: 1px solid rgba(255, 255, 255, 0.18); */
+}
+
+/* For Webkit browsers like Chrome/Safari */
+.scrollable-div::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollable-div::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.scrollable-div::-webkit-scrollbar-thumb {
+  background-color: rgb(216, 216, 216);
+  border-radius: 40px;
+}
+
+.scrollable-div::-webkit-scrollbar-thumb:hover {
+  background: #bbbbbb;
+}
+
+/* For Firefox */
+.scrollable-div {
+  scrollbar-width: thin;
+  scrollbar-color: #bbbbbb #f1f1f1;
+}

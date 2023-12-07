@@ -30,7 +30,7 @@ export const MainNavWrapper = ({ children }) => {
       {showMenu && (
         <div className="fixed top-0 left-0 w-full h-full bg-black opacity-70 z-10" />
       )}
-      <nav className="mx-4 lg:mx-20 border-b border-[#DDDDDD] py-4 lg:py-12">
+      <nav className="font-worksans mx-4 lg:mx-20 border-b border-[#DDDDDD] py-4 lg:py-12">
         <div className="px-2 lg:px-4 flex justify-between items-center">
           <div>
             <Link href="/">DocNinja</Link>

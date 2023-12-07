@@ -10,7 +10,7 @@ export default function Contact() {
   const [errors, setErrors] = useState({});
 
   const inputStyle =
-    "w-full bg-[#f2f2f2] px-4 py-3 rounded-md rounded-md focus:outline-none focus:border-blue-500";
+    "w-full bg-[#f2f2f2] px-4 py-3 rounded-md focus:outline-none focus:border-blue-500";
 
   const handleChange = (value, setter, field) => {
     setter(value);

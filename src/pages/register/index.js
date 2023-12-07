@@ -6,7 +6,6 @@ import "react-toastify/dist/ReactToastify.css";
 export default function Register() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [sex, setSex] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -36,7 +35,6 @@ export default function Register() {
   const resetForm = () => {
     setFirstName("");
     setLastName("");
-    setSex("");
     setEmail("");
     setPassword("");
     setPasswordStrength("");
@@ -83,7 +81,6 @@ export default function Register() {
     const newErrors = {};
     if (!firstName.trim()) newErrors.firstName = "First name is required.";
     if (!lastName.trim()) newErrors.lastName = "Last name is required.";
-    if (!sex) newErrors.sex = "Please select your sex.";
     if (!email.trim()) {
       newErrors.email = "Email is required.";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -192,25 +189,7 @@ export default function Register() {
           {errors.lastName && (
             <p className="text-red-500 text-xs ml-2">{errors.lastName}</p>
           )}
-        </div>
-        <div>
-          <label className="ml-2">Sex</label>
-          <select
-            name="sex"
-            value={sex}
-            onChange={(e) => handleChange(e.target.value, setSex, "sex")}
-            className={`${inputStyle}`}
-          >
-            <option value="" disabled>
-              Select Sex
-            </option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
-          {errors.sex && (
-            <p className="text-red-500 text-xs ml-2">{errors.sex}</p>
-          )}
-        </div>
+        </div> 
         <div>
           <label className="ml-2">Email Address</label>
           <input
@@ -264,7 +243,7 @@ export default function Register() {
       <button
         type="submit"
         onClick={handleSubmit}
-        className="bg-[#266FD5] text-white text-[22px] mt-4 w-full max-w-[600px] font-bold py-3 rounded-md hover:bg-[#1f5aad] duration-200"
+        className="bg-[#266FD5] text-white text-[14px] md:text-[18px] mt-4 w-full max-w-[600px] font-bold py-3 rounded-md hover:bg-[#1f5aad] duration-200"
       >
         Create Account
       </button>

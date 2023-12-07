@@ -7,13 +7,16 @@ const UserSchema = new mongoose.Schema({
   lastName: {
     type: String,
   },
-  sex: {
-    type: String,
-  },
+  // sex: {
+  //   type: String,
+  // },
   email: {
     type: String,
   },
   password: {
+    type: String,
+  },
+  googleId: {
     type: String,
   },
 });
