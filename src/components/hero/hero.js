@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export const HeroSection = () => {
   return (
-    <section className="flex lg:pt-10 flex-row items-center overflow-y-auto h-[calc(100vh-100px)] lg:h-[calc(100vh-250px)]">
+    <section className="flex lg:pt-10 flex-row items-center overflow-y-auto h-[calc(100vh-100px)] lg:h-[calc(100vh-200px)]">
       <div className="grid lg:grid-cols-5 gap-4 items-center">
         <div className="lg:col-span-2 order-2 lg:order-1">
           <h1 className="text-[38px] lg:text-[56px] font-extrabold leading-tight">
