@@ -90,7 +90,7 @@ const DropZone = ({ createdFields, setCreatedFields }) => {
     <div ref={drop} className="drop-zone w-3/4 bg-gray-100 p-4">
       {createdFields.length > 0 ? (
         createdFields.map((field, index) => {
-          console.log(field)
+          console.log(field);
           if (!field.id) return null; // Skip rendering if 'id' is undefined
           return (
             <FormField
@@ -220,7 +220,7 @@ export default function Templates({ templates }) {
       <div className="p-4">
         <span className="flex items-center justify-between">
           <h1 className="text-2xl font-bold mb-4">Templates</h1>
-          <Dropdown backdrop="blur" className="bg-[#16181A]">
+          <Dropdown backdrop="blur">
             <DropdownTrigger>
               <Button
                 variant="ghost"
@@ -231,10 +231,7 @@ export default function Templates({ templates }) {
                 Add New Template
               </Button>
             </DropdownTrigger>
-            <DropdownMenu
-              aria-label="Static Actions"
-              className="text-[#BBBBBB]"
-            >
+            <DropdownMenu aria-label="Static Actions">
               <DropdownItem key="upload_pdf"> Upload PDF</DropdownItem>
               <DropdownItem key="create_new" onPress={onOpen}>
                 Create New

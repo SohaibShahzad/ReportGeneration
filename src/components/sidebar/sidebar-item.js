@@ -13,24 +13,24 @@ export const SidebarItem = ({ icon, title, isActive, href = "" }) => {
   };
 
   const activeStyle = isActive
-    ? "bg-blue-200 hover:bg-blue-200"
-    : "hover:bg-gray-200";
+    ? "bg-[#00204d]"
+    : "hover:bg-[#1a79ff]";
 
   return (
     <Link
       href={href}
       passHref
-      className={`flex items-center gap-2 w-full p-2 rounded-lg cursor-pointer transition-all ease-in-out ${activeStyle}`}
+      className={`flex items-center gap-4 w-full py-3 px-8 cursor-pointer transition-all ease-in-out ${activeStyle}`}
       onClick={handleClick}
     >
       {icon}
       <span
-        className={`font-normal text-base ${
-          isActive ? "text-blue-600" : "text-gray-900"
-        }`}
+        className={`text-white font-bold`}
       >
         {title}
       </span>
     </Link>
   );
 };
+
+// ${isActive ? "text-blue-600" : "text-gray-900"}

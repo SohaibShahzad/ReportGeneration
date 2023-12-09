@@ -16,10 +16,10 @@ export const UserDropdown = () => {
         signOut({ callbackUrl: "/" });
       };
   return (
-    <Dropdown className="bg-[#16181A] mt-2">
+    <Dropdown className="mt-2">
       <DropdownTrigger>
         <button className="flex items-center justify-center">
-          <RxAvatar className="w-9 h-9 text-[#CCCCCC] hover:text-[#FFFFFF] duration-200" />
+          <RxAvatar className="w-9 h-9 text-[#4e8ce4] hover:text-[#1b59b1] duration-200 hover:scale-110" />
         </button>
       </DropdownTrigger>
 
@@ -33,29 +33,29 @@ export const UserDropdown = () => {
           className="border-b-1 border-[#555555] pb-2"
         >
           <DropdownItem key="profile" css={{ height: "$18" }}>
-            <div className="text-[#666666]">
-              Signed in as <br /> <strong className="">{session?.user?.name}</strong>
+            <div className="text-[#AAAAAA]">
+              Signed in as <br /> <strong className="text-[#666666]">{session?.user?.firstName} {" "} {session?.user?.lastName}</strong>
             </div>
           </DropdownItem>
-          <DropdownItem key="settings" withDivider>
+          {/* <DropdownItem key="settings" className="text-[#666666]">
             My Settings
           </DropdownItem>
-          <DropdownItem key="team_settings">Team Settings</DropdownItem>
-          <DropdownItem key="analytics" withDivider>
+          <DropdownItem key="team_settings" className="text-[#666666]">Team Settings</DropdownItem> */}
+          {/* <DropdownItem key="analytics" className="text-[#666666]">
             Analytics
           </DropdownItem>
-          <DropdownItem key="system">System</DropdownItem>
-          <DropdownItem key="configurations">Configurations</DropdownItem>
-          <DropdownItem key="help_and_feedback" withDivider>
+          <DropdownItem key="system" className="text-[#666666]">System</DropdownItem>
+          <DropdownItem key="configurations" className="text-[#666666]">Configurations</DropdownItem> */}
+          <DropdownItem key="help_and_feedback" className="text-[#888888]">
             Help & Feedback
           </DropdownItem>
         </DropdownSection>
-        <DropdownSection title="Account">
+        <DropdownSection title="Account" className="text-white">
           <DropdownItem
             key="logout"
             withDivider
             color="danger"
-            className="text-danger"
+            className="text-[#ff0000]"
             onClick={handleLogout}
           >
             Log Out

@@ -47,7 +47,7 @@ export const Onboarding = ({ onCompletion, user }) => {
   return (
     <main className="md:w-[650px] mx-auto flex flex-col items-center justify-center h-[calc(100vh-70px)] md:h-[calc(100vh-130px)]">
       <h1 className="text-left text-[24px] md:text-[28px] font-worksans mb-6 md:mb-10">
-        Welcome {user?.name}! Let's get you rolling!
+        Welcome {user?.firstName}! Let's get you rolling!
       </h1>
 
       <form
@@ -93,6 +93,7 @@ export const Onboarding = ({ onCompletion, user }) => {
             <option value="" disabled >
               Select Number of Templates
             </option>
+            <option value="not sure">Not Sure</option>
             <option value="0-1">Just 1</option>
             <option value="2-10">2 - 10</option>
             <option value="11-25">11 - 25</option>

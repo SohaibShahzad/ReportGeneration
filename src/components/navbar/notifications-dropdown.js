@@ -10,10 +10,10 @@ import {
 
 export const NotificationsDropdown = () => {
   return (
-    <Dropdown className="bg-[#16181A] mt-3">
+    <Dropdown className="mt-3">
       <DropdownTrigger>
         <button className="flex items-center justify-center">
-          <IoNotifications className="w-5 h-5 text-[#AAAAAA] hover:text-[#DDDDDD] duration-200" />
+          <IoNotifications className="w-6 h-6 text-[#4e8ce4] hover:text-[#1b59b1] duration-200 hover:scale-110" />
         </button>
       </DropdownTrigger>
       <DropdownMenu

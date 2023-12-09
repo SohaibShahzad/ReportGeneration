@@ -37,14 +37,16 @@ export default NextAuth({
       if (user) {
         // Add additional user info to the JWT token
         token.id = user.id;
-        token.name = user.firstName + " " + user.lastName;
+        token.firstName = user.firstName;
+        token.lastName = user.lastName;
       }
       return token;
     },
     async session({ session, token }) {
       // Add additional user info to the session
       session.user.id = token.id;
-      session.user.name = token.name;
+      session.user.firstName = token.firstName;
+      session.user.lastName = token.lastName;
       return session;
     },
   },

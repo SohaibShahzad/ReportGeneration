@@ -17,7 +17,7 @@ export const Layout = ({ children }) => {
     <SidebarContext.Provider
       value={{ collapsed: sidebarOpen, setCollapsed: handleToggleSidebar }}
     >
-      <div className="flex h-screen bg-black text-white">
+      <div className="flex h-screen bg-[#EBF2FC] font-worksans">
         <SidebarWrapper />
         <div className="flex-1 overflow-y-auto max-w-none">
           <NavbarWrapper>{children}</NavbarWrapper>
