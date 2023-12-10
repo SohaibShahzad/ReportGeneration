@@ -18,28 +18,16 @@ export const NavbarWrapper = ({ children }) => {
           <div className="md:hidden flex">
             <BurgerButton />
           </div>
-          <div className="relative flex items-center w-full mr-6">
-            <FaSearch className="absolute ml-5 w-6 h-6 text-[#bcd4f5]" />
+          <div className="relative flex items-center w-full mr-2 ml-9 md:ml-0 md:mr-6">
+            <FaSearch className="hidden md:flex absolute ml-5 w-6 h-6 text-[#bcd4f5]" />
             <input
               type="text"
               placeholder="Search"
-              className="w-full py-3 pl-14 pr-3 rounded-full bg-[#F5F9FD] placeholder:text-[#bcd4f5] text-[#4e8ce4] focus:outline-[#7aa9eb]"
+              className="w-full py-3 pl-4 md:pl-14 pr-3 rounded-full bg-[#F5F9FD] placeholder:text-[#bcd4f5] text-[#4e8ce4] focus:outline-[#7aa9eb]"
             />
           </div>
           <div className="flex items-center gap-1 md:gap-6">
-            {/* <span className="flex items-center gap-2">
-            <HiSpeakerphone className="w-5 h-5 text-[#AAAAAA]" />
-            <span>Feedback?</span>
-          </span> */}
             <NotificationsDropdown />
-            <MdContactSupport className="w-7 h-7 text-[#4e8ce4]" />
-            {/* <a
-              href="https://github.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <FaGithub className="w-5 h-5 text-[#bcd4f5]" />
-            </a> */}
             <UserDropdown />
           </div>
         </nav>

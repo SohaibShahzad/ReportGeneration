@@ -8,7 +8,7 @@ import { BsFillGrid1X2Fill } from "react-icons/bs";
 import { SidebarMenu } from "./sidebar-menu";
 import { useSidebarContext } from "../layout/layout-context";
 import { CollapseItems } from "./collapse-items";
-import { FaStar } from "react-icons/fa6";
+import { FaStar, FaCreditCard } from "react-icons/fa6";
 
 export const SidebarWrapper = () => {
   const router = useRouter();
@@ -27,7 +27,7 @@ export const SidebarWrapper = () => {
         />
       )} */}
 
-      <div className="bg-[#06367A] z-100000 dark:bg-gray-800 h-full w-60 flex-shrink-0 dark:border-gray-700 rounded-lg flex flex-col justify-between">
+      <div className="bg-[#06367A] z-100000 dark:bg-gray-800 h-full w-60 flex-shrink-0 dark:border-gray-700 rounded-lg flex flex-col justify-between overflow-y-auto">
         <div>
           <div className="flex justify-center mt-6 py-6">
             <Avatar
@@ -36,7 +36,7 @@ export const SidebarWrapper = () => {
               className="w-28 h-28"
             />
           </div>
-          <div className="flex flex-col gap-4 mt-4 py-2">
+          <div className="flex flex-col gap-4 mt-4 py-2 ">
             {/* Sidebar Items Here */}
             <SidebarMenu title="DASHBOARD">
               <SidebarItem
@@ -54,9 +54,9 @@ export const SidebarWrapper = () => {
                 href="/dashboard/templates"
               />
               <CollapseItems
-                icon={<FaHome />}
-                items={["Banks Accounts", "Credit Cards", "Loans"]}
-                title="Balances"
+                icon={<FaCreditCard className="text-white w-5 h-5" />}
+                items={["History", "Card-Details", "Subscription"]}
+                title="Payment"
               />
             </SidebarMenu>
           </div>
