@@ -21,6 +21,14 @@ export default function Login() {
     }
   };
 
+  const handleGoogleLogin = async () => {
+    await signIn("google")
+    console.log("Google")
+  }
+  const handleMicrosoftLogin = () => {
+    console.log("Microsoft")
+  }
+
   const validateFields = () => {
     const newErrors = {};
     if (!email.trim()) {
@@ -40,7 +48,7 @@ export default function Login() {
     if (!validateFields()) {
       return;
     }
-  
+
     // Wrap the signIn process in a promise
     const loginPromise = new Promise(async (resolve, reject) => {
       const result = await signIn("credentials", {
@@ -48,21 +56,21 @@ export default function Login() {
         email,
         password,
       });
-  
+
       if (result.error) {
         reject(result.error);
       } else {
         resolve("Login successful!");
       }
     });
-  
+
     toast
       .promise(
         loginPromise,
         {
           pending: "Logging in...",
           success: "Logged in successfully! Redirecting...",
-          error: "Login failed. Please check your credentials."
+          error: "Login failed. Please check your credentials.",
         },
         {
           position: "bottom-right",
@@ -82,13 +90,12 @@ export default function Login() {
         // Handle any additional actions on login failure
       });
   };
-  
 
   const inputStyle =
     "w-full bg-[#f2f2f2] px-4 py-3 rounded-md rounded-md focus:outline-none focus:border-blue-500";
 
   return (
-    <main className="flex flex-col items-center justify-center overflow-y-auto h-[calc(100vh-150px)] md:h-[calc(100vh-250px)]">
+    <main className="flex flex-col items-center justify-center overflow-y-auto h-[calc(100vh-150px)] md:h-[calc(100vh-250px)] font-worksans">
       <ToastContainer autoClose={2000} theme="light" position="bottom-right" />
       <h1 className="text-center text-[40px] md:text-[56px] my-2 md:my-12 font-extrabold">
         Login
@@ -145,6 +152,20 @@ export default function Login() {
           Login
         </button>
       </form>
+      <div className="flex flex-col md:flex-row mt-5 justify-between w-full max-w-[600px] gap-2 md:gap-5 ">
+        <button className="w-full rounded-md py-3 border flex items-center justify-center gap-2"
+        onClick={handleGoogleLogin}
+        >
+          <img src="/assets/google.svg" className="w-7 h-7" />
+          Login with Google
+        </button>
+        <button className="w-full rounded-md py-3 border flex items-center justify-center gap-2"
+          onClick={handleMicrosoftLogin}
+        >
+          <img src="/assets/microsoft.svg" className="w-7 h-7" />
+          Login with Microsoft
+        </button>
+      </div>
     </main>
   );
 }

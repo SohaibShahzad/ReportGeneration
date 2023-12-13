@@ -12,6 +12,8 @@ import { signOut, useSession } from "next-auth/react";
 export const UserDropdown = () => {
   const { data: session } = useSession();
 
+  let name = session?.user?.name || session?.user?.firstName + " " + session?.user?.lastName
+
   const handleLogout = () => {
     signOut({ callbackUrl: "/" });
   };
@@ -44,7 +46,7 @@ export const UserDropdown = () => {
             <div className="text-[#AAAAAA]">
               Signed in as <br />{" "}
               <strong className="text-[#666666]">
-                {session?.user?.firstName} {session?.user?.lastName}
+                {name}
               </strong>
             </div>
           </DropdownItem>

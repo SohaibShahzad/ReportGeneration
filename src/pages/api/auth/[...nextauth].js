@@ -1,5 +1,6 @@
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import connectToDb from "@/lib/connectToDb";
 import bcrypt from "bcryptjs";
 import User from "@/model/userModel";
@@ -14,6 +15,7 @@ export default NextAuth({
       },
       async authorize(credentials, req) {
         await connectToDb();
+        if (!credentials) return null;
         const user = await User.findOne({ email: credentials.email });
         if (user && bcrypt.compareSync(credentials.password, user.password)) {
           // Return user data without the password
@@ -22,6 +24,10 @@ export default NextAuth({
         }
         throw new Error("Email or password is incorrect");
       },
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
   secret: process.env.JWT_SECRET,
@@ -33,6 +39,25 @@ export default NextAuth({
     encryption: true,
   },
   callbacks: {
+    async signIn({ user, account, profile }) {
+      if (account?.provider === "google") {
+        await connectToDb();
+
+        const existingUser = await User.findOne({ email: profile.email });
+
+        if (!existingUser) {
+          const newUser = new User({
+            firstName: profile.given_name,
+            lastName: profile.family_name,
+            email: profile.email,
+            googleId: profile.sub,
+          });
+
+          await newUser.save();
+        }
+      }
+      return true;
+    },
     async jwt({ token, user }) {
       if (user) {
         // Add additional user info to the JWT token
@@ -49,6 +74,10 @@ export default NextAuth({
       session.user.lastName = token.lastName;
       return session;
     },
+    async redirect({url, baseUrl}){
+    return `${baseUrl}/dashboard`
+
+    }
   },
   pages: {
     signIn: "/login",
