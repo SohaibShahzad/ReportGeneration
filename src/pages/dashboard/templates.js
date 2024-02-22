@@ -1,8 +1,6 @@
-import { getSession } from "next-auth/react";
-import axios from "axios";
-import React, { useState, useRef } from "react";
-import { DndProvider, useDrag, useDrop } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import { getSession, useSession } from "next-auth/react";
+import { useState } from "react";
+// import axios from "axios";
 import {
   Card,
   CardBody,
@@ -11,238 +9,162 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  ModalContent,
   useDisclosure,
 } from "@nextui-org/react";
-import { LuPlus, LuWrapText, LuListChecks } from "react-icons/lu";
-import { IoChevronDown, IoEnterOutline } from "react-icons/io5";
-import {
-  MdOutlineDragIndicator,
-  MdOutlineTextFields,
-  MdOutlineRadioButtonChecked,
-} from "react-icons/md";
+import { LuPlus } from "react-icons/lu";
+import { IoChevronDown, IoAddCircle } from "react-icons/io5";
+import { MdKeyboardBackspace } from "react-icons/md";
+import { RiFileWord2Fill } from "react-icons/ri";
+import { GrOnedrive } from "react-icons/gr";
+import { FaGoogleDrive } from "react-icons/fa6";
+import { CreateNewComponent } from "@/components/templatesUpload/createNewComponent";
+import { UploadDocComponent } from "@/components/templatesUpload/uploadDocComponent";
+import { OneDriveComponent } from "@/components/templatesUpload/oneDriveComponent";
+import { GoogleDriveComponent } from "@/components/templatesUpload/googleDriveComponent";
 
-const DraggableItem = ({ icon, name, type }) => {
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: "FIELD",
-    item: { name, type },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-  }));
+export default function Templates({ templatesProp }) {
+  const [templates, setTemplates] = useState(templatesProp);
+  const [chosenOption, setChosenOption] = useState("default");
 
-  return (
-    <Card
-      ref={drag}
-      className={`cursor-pointer hover:bg-[#DDDDDD] mb-4 p-3 rounded-md draggable-item ${
-        isDragging ? "dragging" : ""
-      }`}
-      style={{ opacity: isDragging ? 0.5 : 1 }}
-    >
-      <span className="flex items-center justify-between">
-        <span className="flex items-center gap-2">
-          {icon}
-          {name}
-        </span>
-        <MdOutlineDragIndicator className="w-6 h-6" />
-      </span>
-    </Card>
-  );
-};
+  const { data: session } = useSession();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [templateName, setTemplateName] = useState("");
+  const [templateContent, setTemplateContent] = useState("");
 
-// DropZone Component
-const DropZone = ({ createdFields, setCreatedFields }) => {
-  const [, drop] = useDrop({
-    accept: "FIELD",
-    drop: (item, monitor) => {
-      if (!createdFields.find((field) => field.id === item.id)) {
-        // Adding a new field to the createdFields
-        setCreatedFields((prevFields) => [
-          ...prevFields,
-          { ...item, id: uniqueId() },
-        ]);
-      }
-    },
-    collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
-    }),
-  });
+  const inputStyle =
+    "w-full h-full text-[20px] font-bold bg-[#f2f2f2] px-4 py-3 rounded-md focus:outline-none border border-[#777777] focus:border-blue-500";
 
-  const moveField = (dragIndex, hoverIndex) => {
-    const dragField = createdFields[dragIndex];
-    const updatedFields = [...createdFields];
-    updatedFields.splice(dragIndex, 1); // Remove the dragged item
-    updatedFields.splice(hoverIndex, 0, dragField); // Insert it before the hovered item
-    setCreatedFields(updatedFields);
-  };
+  const handleSave = async () => {
+    onClose();
+    const userId = session.user.id;
+    const newTemplate = {
+      name: templateName,
+      content: templateContent,
+    };
 
-  const deleteField = (index) => {
-    const updatedFields = [...createdFields];
-    updatedFields.splice(index, 1);
-    setCreatedFields(updatedFields);
-  };
+    try {
+      const saveResponse = await fetch("/api/template", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId, template: newTemplate }),
+      });
 
-  return (
-    <div ref={drop} className="drop-zone w-3/4 bg-gray-100 p-4">
-      {createdFields.length > 0 ? (
-        createdFields.map((field, index) => {
-          console.log(field);
-          if (!field.id) return null; // Skip rendering if 'id' is undefined
-          return (
-            <FormField
-              key={field.id}
-              field={field}
-              index={index}
-              moveField={moveField}
-              deleteField={() => deleteField(index)}
-            />
-          );
-        })
-      ) : (
-        <p className="text-center text-gray-500">
-          Drag and drop elements here to build your form
-        </p>
-      )}
-    </div>
-  );
-};
+      if (saveResponse.ok) {
+        console.log("Template saved successfully.");
 
-// FormField Component
-const FormField = ({
-  field,
-  index,
-  moveField,
-  deleteField,
-  setCreatedFields,
-}) => {
-  const ref = useRef(null);
-
-  const [, drop] = useDrop({
-    accept: "FIELD",
-    hover(item, monitor) {
-      if (!ref.current) {
-        return;
-      }
-      const dragIndex = item.index;
-      const hoverIndex = index;
-      if (dragIndex === hoverIndex) {
-        return;
-      }
-      moveField(dragIndex, hoverIndex);
-      item.index = hoverIndex;
-    },
-  });
-
-  const [{ isDragging }, drag] = useDrag({
-    type: "FIELD",
-    item: () => {
-      return { id: field.id, index };
-    },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-    end: (item, monitor) => {
-      if (!monitor.didDrop()) {
-        setCreatedFields((prevFields) => {
-          // Update the index of each field
-          return prevFields.map((f, idx) => {
-            if (f.id === item.id) {
-              return { ...f, index: idx };
-            }
-            return f;
-          });
+        const fetchResponse = await fetch(`/api/template?userId=${userId}`, {
+          method: "GET",
         });
+
+        if (fetchResponse.ok) {
+          const data = await fetchResponse.json();
+          setTemplates(data.templates);
+        } else {
+          console.error("Error refetching templates.");
+        }
+      } else {
+        console.error("Error saving template.");
       }
-    },
-  });
-
-  // Connect drag and drop refs
-  drag(ref);
-  drop(ref);
-
-  return (
-    <div
-      ref={ref}
-      style={{ opacity: isDragging ? 0 : 1 }}
-      className="field-item"
-    >
-      {field.name}
-      <button onClick={deleteField} className="delete-button">
-        Delete
-      </button>
-      {/* ...other field rendering logic */}
-    </div>
-  );
-};
-
-const uniqueId = () => {
-  return Math.random().toString(36);
-};
-
-export default function Templates({ templates }) {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [createdFields, setCreatedFields] = useState([]);
-
-  const draggableItems = [
-    {
-      icon: <LuWrapText className="w-5 h-5" />,
-      name: "Long Question",
-      type: "text",
-    },
-    {
-      icon: <IoEnterOutline className="w-5 h-5" />,
-      name: "Short Question",
-      type: "short",
-    },
-    {
-      icon: <LuListChecks className="w-5 h-5" />,
-      name: "Multiple Choice",
-      type: "multiple",
-    },
-    {
-      icon: <MdOutlineRadioButtonChecked className="w-5 h-5" />,
-      name: "Unique Choice",
-      type: "unique",
-    },
-    // Add more items as needed
-  ];
-  const handleDrop = (item) => {
-    // Ensure the dropped item has an 'id' property
-    const newItemWithId = { ...item, id: item.id || uniqueId() };
-    setCreatedFields((prevFields) => [...prevFields, newItemWithId]);
+    } catch (error) {
+      console.error("Error in handleSave:", error);
+    }
   };
+
+  const handleChange = (value, setter) => {
+    setter(value);
+  };
+
+  const handleOptionSelect = (option) => {
+    setChosenOption(option);
+  };
+
+  const renderComponent = () => {
+    switch (chosenOption) {
+      case "docx":
+        return <UploadDocComponent />;
+      case "one_drive":
+        return <OneDriveComponent />;
+      case "g_drive":
+        return <GoogleDriveComponent />;
+      case "create_new":
+        return <CreateNewComponent />;
+      default:
+        return null;
+    }
+  };
+
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div className="p-4">
-        <span className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold mb-4">Templates</h1>
-          <Dropdown backdrop="blur">
+    <div className="p-4">
+      <span className="flex items-center justify-between mb-4 gap-1">
+        <h1 className="text-xl font-bold">Templates</h1>
+
+        {chosenOption !== "default" ? (
+          <Button
+            variant="ghost"
+            color="danger"
+            size="sm"
+            auto
+            startContent={<MdKeyboardBackspace />}
+            onClick={() => handleOptionSelect("default")}
+          >
+            Back
+          </Button>
+        ) : (
+          <Dropdown>
             <DropdownTrigger>
               <Button
                 variant="ghost"
                 color="secondary"
+                size="sm"
+                auto
                 startContent={<LuPlus />}
                 endContent={<IoChevronDown />}
               >
-                Add New Template
+                Create
               </Button>
             </DropdownTrigger>
             <DropdownMenu aria-label="Static Actions">
-              <DropdownItem key="upload_pdf"> Upload PDF</DropdownItem>
-              <DropdownItem key="create_new" onPress={onOpen}>
+              <DropdownItem
+                key="docx"
+                startContent={<RiFileWord2Fill />}
+                onPress={() => handleOptionSelect("docx")}
+              >
+                Upload Doc
+              </DropdownItem>
+              <DropdownItem
+                key="one_drive"
+                startContent={<GrOnedrive />}
+                onPress={() => handleOptionSelect("one_drive")}
+              >
+                One Drive
+              </DropdownItem>
+              <DropdownItem
+                key="g_drive"
+                startContent={<FaGoogleDrive />}
+                onPress={() => handleOptionSelect("g_drive")}
+              >
+                Google Drive
+              </DropdownItem>
+              <DropdownItem
+                key="create_new"
+                startContent={<IoAddCircle />}
+                onPress={() => handleOptionSelect("create_new")}
+              >
                 Create New
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
-        </span>
-        <div>
+        )}
+      </span>
+      {chosenOption === "create_new" ? (
+        renderComponent()
+      ) : (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 lg:gap-8">
           {templates.length > 0 ? (
             templates.map((template) => (
-              <Card key={template._id} className="max-w-[400px] mb-4">
+              <Card key={template._id} className="max-w-full mb-3 h-24">
                 <CardBody>
                   <h1>{template.name}</h1>
                 </CardBody>
@@ -260,44 +182,8 @@ export default function Templates({ templates }) {
             </Card>
           )}
         </div>
-
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="full">
-          <ModalHeader>Create New Template</ModalHeader>
-          <ModalContent>
-            <ModalBody className="flex flex-row">
-              <div className="draggable-items w-1/4 p-4">
-                <p className="text-center text-[18px] pb-4">Elements</p>
-                {draggableItems.map((item, index) => (
-                  <DraggableItem
-                    key={index}
-                    icon={item.icon}
-                    name={item.name}
-                    type={item.type}
-                  />
-                ))}
-              </div>
-              <div className="form-area w-3/4 p-4 bg-white flex justify-center">
-                <DropZone
-                  onDrop={handleDrop}
-                  createdFields={createdFields}
-                  setCreatedFields={setCreatedFields}
-                />{" "}
-                {/* Here you can add form elements based on createdFields */}
-              </div>
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                onPress={() => {
-                  console.log(createdFields);
-                }}
-              >
-                Create Template
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-      </div>
-    </DndProvider>
+      )}
+    </div>
   );
 }
 
@@ -312,19 +198,25 @@ export async function getServerSideProps(context) {
       },
     };
   }
-
-  // Fetch templates for the logged-in doctor
-  let templates = [];
+  let templatesProp = [];
   try {
-    const response = await axios.get(
-      `/api/templates?doctorId=${session.user.id}`
+    const response = await fetch(
+      `${process.env.NEXTAUTH_URL}/api/template?userId=${session.user.id}`,
+      {
+        method: "GET",
+      }
     );
-    templates = response.data.templates;
+    if (response.ok) {
+      const data = await response.json();
+      templatesProp = data.templates;
+    } else {
+      console.error(`Error fetching data. Status: ${response.status}`);
+    }
   } catch (error) {
     console.error("Error fetching templates:", error);
   }
 
   return {
-    props: { templates },
+    props: { templatesProp },
   };
 }

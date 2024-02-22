@@ -10,6 +10,7 @@ module.exports = {
   theme: {
     fontFamily: {
       'worksans': ['Work Sans', 'sans-serif'],
+      'cutive': ['Cutive', 'serif'],
     },
     extend: {
       backgroundImage: {

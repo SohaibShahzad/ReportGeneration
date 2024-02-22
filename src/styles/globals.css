@@ -7,6 +7,11 @@
   src: url("../../public/fonts/WorkSans-Variable.ttf");
 }
 
+@font-face {
+  font-family: "Cutive";
+  src: url("../../public/fonts/Cutive-Regular.ttf");
+}
+
 .menu-animation {
   z-index: 10;
   -webkit-animation: slide-top 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;

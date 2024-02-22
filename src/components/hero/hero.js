@@ -15,7 +15,7 @@ export const HeroSection = () => {
           </p>
           <Link
             href="/register"
-            className="transform bg-yellow-400 px-12 py-3 rounded-lg font-bold hover:scale-110 duration-200 hover:bg-yellow-500"
+            className="transform bg-[#FF9770] px-12 py-3 rounded-lg font-bold hover:scale-110 duration-200 hover:bg-[#ff7c4d]"
           >
             Try for Free
           </Link>

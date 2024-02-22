@@ -61,7 +61,7 @@ export default NextAuth({
     async jwt({ token, user }) {
       if (user) {
         // Add additional user info to the JWT token
-        token.id = user.id;
+        token.id = user._id || user.id;
         token.firstName = user.firstName;
         token.lastName = user.lastName;
       }

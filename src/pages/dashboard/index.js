@@ -7,7 +7,7 @@ export default function Dashboard() {
   return (
     <div className="p-4">
       <span className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold mb-4">
+        <h1 className="text-xl font-bold mb-4">
           Welcome to the Dashboard, {name}
         </h1>
       </span>

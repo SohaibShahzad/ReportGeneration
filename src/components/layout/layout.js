@@ -19,7 +19,7 @@ export const Layout = ({ children }) => {
     >
       <div className="flex h-screen bg-[#EBF2FC] font-worksans">
         <SidebarWrapper />
-        <div className="flex-1 overflow-y-auto max-w-none">
+        <div className="flex-1 max-w-none">
           <NavbarWrapper>{children}</NavbarWrapper>
         </div>
       </div>

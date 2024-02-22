@@ -2,45 +2,66 @@ import Template from "@/model/templateModel"; // Adjust the path as needed
 import connectToDb from "@/lib/connectToDb";
 import mongoose from "mongoose";
 
-export default async function handler(req, res) {
+const isValidMongoId = (id) => {
+  return id.match(/^[0-9a-fA-F]{24}$/);
+};
+const template = async (req, res) => {
   await connectToDb();
 
-  if (req.method === 'POST') {
+  if (req.method === "POST") {
     try {
-      const { doctorId, template } = req.body;
-      const docId = mongoose.Types.ObjectId(doctorId); // Convert to ObjectId
+      const { userId, template } = req.body;
+      let query;
+      if (isValidMongoId(userId)) {
+        query = { userId: userId };
+      } else {
+        query = { googleId: userId };
+      }
 
-      // Find the doctor's template document or create a new one if it doesn't exist
-      const docTemplate = await Template.findOneAndUpdate(
-        { doctorId: docId },
-        { $push: { templates: template } },
-        { new: true, upsert: true }
-      );
+      try {
+        const templateBook = await Template.findOneAndUpdate(
+          query,
+          { $push: { templates: template } },
+          { new: true, upsert: true }
+        );
 
-      res.status(201).json(docTemplate);
+        res.status(201).json(templateBook);
+      } catch (dbError) {
+        res.status(500).json({
+          message: "Database operation failed",
+          error: dbError.message,
+        });
+      }
     } catch (err) {
       res.status(400).json({ message: err.message });
     }
-  } else if (req.method === 'GET') {
+  } else if (req.method === "GET") {
     try {
-      const { doctorId } = req.query;
-      const docId = mongoose.Types.ObjectId(doctorId); // Convert to ObjectId
+      const { userId } = req.query;
+      let query;
+      if (isValidMongoId(userId)) {
+        const user_Id = mongoose.Types.ObjectId(userId);
+        query = { userId: user_Id };
+      } else {
+        query = { googleId: userId };
+      }
 
       // Find templates for a specific doctor
-      const templates = await Template.findOne({ doctorId: docId });
+      const templates = await Template.findOne(query);
 
       res.json(templates);
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
-  } else if (req.method === 'PUT') {
+  } else if (req.method === "PUT") {
+    console.log("inhere template put");
     try {
-      const { doctorId, templateId, updatedTemplate } = req.body;
-      const docId = mongoose.Types.ObjectId(doctorId);
+      const { userId, templateId, updatedTemplate } = req.body;
+      const user_Id = mongoose.Types.ObjectId(userId);
       const tempId = mongoose.Types.ObjectId(templateId);
 
       const updatedDoc = await Template.findOneAndUpdate(
-        { "doctorId": docId, "templates._id": tempId },
+        { userId: user_Id, "templates._id": tempId },
         { $set: { "templates.$": updatedTemplate } },
         { new: true }
       );
@@ -49,14 +70,14 @@ export default async function handler(req, res) {
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
-  } else if (req.method === 'DELETE') {
+  } else if (req.method === "DELETE") {
     try {
-      const { doctorId, templateId } = req.body;
-      const docId = mongoose.Types.ObjectId(doctorId);
+      const { userId, templateId } = req.body;
+      const user_Id = mongoose.Types.ObjectId(userId);
       const tempId = mongoose.Types.ObjectId(templateId);
 
       const updatedDoc = await Template.findOneAndUpdate(
-        { doctorId: docId },
+        { userId: user_Id },
         { $pull: { templates: { _id: tempId } } },
         { new: true }
       );
@@ -69,4 +90,6 @@ export default async function handler(req, res) {
     // Handle any other HTTP methods
     res.status(405).json({ message: "Method not allowed" });
   }
-}
+};
+
+export default template;
