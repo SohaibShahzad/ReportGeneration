@@ -36,6 +36,7 @@ const template = async (req, res) => {
       res.status(400).json({ message: err.message });
     }
   } else if (req.method === "GET") {
+    console.log("inhere template get");
     try {
       const { userId } = req.query;
       let query;
@@ -57,28 +58,45 @@ const template = async (req, res) => {
     console.log("inhere template put");
     try {
       const { userId, templateId, updatedTemplate } = req.body;
-      const user_Id = mongoose.Types.ObjectId(userId);
-      const tempId = mongoose.Types.ObjectId(templateId);
+      let query;
+      if (isValidMongoId(userId)) {
+        const user_Id = mongoose.Types.ObjectId(userId);
+        query = { userId: user_Id };
+      } else {
+        query = { googleId: userId };
+      }
 
       const updatedDoc = await Template.findOneAndUpdate(
-        { userId: user_Id, "templates._id": tempId },
-        { $set: { "templates.$": updatedTemplate } },
+        {
+          ...query,
+          "templates._id": templateId,
+        },
+        {
+          $set: {
+            "templates.$.name": updatedTemplate.name,
+            "templates.$.content": updatedTemplate.content,
+          },
+        },
         { new: true }
       );
-
-      res.json(updatedDoc);
+      res.status(201).json(updatedDoc);
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
   } else if (req.method === "DELETE") {
     try {
+      console.log("inhere template delete");
       const { userId, templateId } = req.body;
-      const user_Id = mongoose.Types.ObjectId(userId);
-      const tempId = mongoose.Types.ObjectId(templateId);
-
+      let query;
+      if (isValidMongoId(userId)) {
+        const user_Id = mongoose.Types.ObjectId(userId);
+        query = { userId: user_Id };
+      } else {
+        query = { googleId: userId };
+      }
       const updatedDoc = await Template.findOneAndUpdate(
-        { userId: user_Id },
-        { $pull: { templates: { _id: tempId } } },
+        query,
+        { $pull: { templates: { _id: templateId } } },
         { new: true }
       );
 

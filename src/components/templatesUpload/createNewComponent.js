@@ -1,13 +1,18 @@
 import { getSession, useSession } from "next-auth/react";
 import { useState } from "react";
+import { Button } from "@nextui-org/react";
 import { toast, ToastContainer } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
 
-export const CreateNewComponent = () => {
+export const CreateNewComponent = ({ onSaveSuccess, templateData }) => {
   const { data: session } = useSession();
-  const [templateName, setTemplateName] = useState("");
-  const [templateContent, setTemplateContent] = useState("");
+  const [templateName, setTemplateName] = useState(
+    templateData ? templateData.name : ""
+  );
+  const [templateContent, setTemplateContent] = useState(
+    templateData ? templateData.content : ""
+  );
   const [errors, setErrors] = useState({});
 
   const inputStyle =
@@ -42,12 +47,29 @@ export const CreateNewComponent = () => {
       content: templateContent,
     };
 
+    if (
+      templateData &&
+      templateData.name === newTemplate.name &&
+      templateData.content === newTemplate.content
+    ) {
+      // No changes in template data, no need to save
+      toast.success("Template data remains unchanged.");
+      onSaveSuccess();
+      return;
+    }
+
     const savePromise = fetch("/api/template", {
-      method: "POST",
+      method: templateData ? "PUT" : "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ userId, template: newTemplate }),
+      body: templateData
+        ? JSON.stringify({
+            userId,
+            templateId: templateData._id,
+            updatedTemplate: newTemplate,
+          })
+        : JSON.stringify({ userId, template: newTemplate }),
     }).then(async (res) => {
       const result = await res.json();
       if (!res.ok) {
@@ -62,18 +84,23 @@ export const CreateNewComponent = () => {
       .promise(savePromise, {
         pending: "Saving template...",
         success: {
-          render({ data }) {
-            return data.message || "Template saved successfully! 👌";
+          render() {
+            const successMessage = templateData
+              ? "Template updated successfully! 👌"
+              : "Template saved successfully! 👌";
+
+            onSaveSuccess();
+
+            return successMessage;
           },
         },
         error: {
           render({ data }) {
-            return data.message || "Failed to save template. 🤯";
+            return console.log(data.message) || "Failed to save template. 🤯";
           },
         },
       })
       .then((result) => {
-        console.log(result.message);
         setTemplateName("");
         setTemplateContent("");
       })
@@ -103,7 +130,7 @@ export const CreateNewComponent = () => {
             <p className="text-red-500 text-xs my-1">{errors.templateName}</p>
           )}
         </div>
-        <div className="mt-3">
+        <div className="my-3">
           <label className="text-[18px] font-bold">Content</label>
           <textarea
             placeholder="Type here..."
@@ -121,12 +148,9 @@ export const CreateNewComponent = () => {
             <p className="text-red-500 text-xs ">{errors.templateContent}</p>
           )}
         </div>
-        <button
-          onClick={handleSave}
-          className="bg-[#266FD5] text-white p-2 rounded-md my-4"
-        >
-          Save
-        </button>
+        <Button onClick={handleSave} color="primary" radius="sm">
+          {templateData ? "Update" : "Save"}
+        </Button>
       </form>
     </main>
   );

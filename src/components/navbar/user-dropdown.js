@@ -13,6 +13,7 @@ export const UserDropdown = () => {
   const { data: session } = useSession();
 
   let name = session?.user?.name || session?.user?.firstName + " " + session?.user?.lastName
+  let email = session?.user?.email
 
   const handleLogout = () => {
     signOut({ callbackUrl: "/" });
@@ -46,8 +47,9 @@ export const UserDropdown = () => {
             <div className="text-[#AAAAAA]">
               Signed in as <br />{" "}
               <strong className="text-[#666666]">
-                {name}
-              </strong>
+                {name} 
+              </strong> <br/>
+              <u>{email}</u>
             </div>
           </DropdownItem>
           <DropdownItem key="help_and_feedback" className="text-[#888888]">
