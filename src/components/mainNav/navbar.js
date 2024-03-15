@@ -71,15 +71,15 @@ export const MainNavWrapper = ({ routeName }) => {
                     <span
                       className={`relative h-[2px] z-10 bg-[#AAAAAA] rounded-lg transition-all duration-300 ${
                         showMenu
-                          ? "transform rotate-45 w-[30px] top-7"
+                          ? "transform rotate-45 w-[30px] top-2"
                           : "w-[25px] top-1"
                       }`}
                     ></span>
                     <span
                       className={`relative h-[2px] z-10 bg-[#AAAAAA] rounded-lg transition-all duration-300 ${
                         showMenu
-                          ? "transform -rotate-45 w-[30px] top-7"
-                          : "w-[25px] "
+                          ? "transform -rotate-45 w-[30px] -top-1"
+                          : "w-[25px]"
                       }`}
                     ></span>
                   </button>
